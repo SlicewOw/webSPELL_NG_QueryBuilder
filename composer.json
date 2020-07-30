@@ -1,0 +1,23 @@
+{
+    "name": "myrisk/webspell_query_builder",
+    "description": "QueryBuilder can be used within webSPELL NG projects to execute queries",
+    "type": "composer-plugin",
+    "require": {
+        "doctrine/dbal": "^2.10"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SlicewOw",
+            "email": "slicewow@webspell-ng.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "webspell_ng\\": "src/"
+        }
+    }
+}
