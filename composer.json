@@ -1,5 +1,5 @@
 {
-    "name": "myrisk/webspell_query_builder",
+    "name": "webspell_ng/query_builder",
     "description": "QueryBuilder can be used within webSPELL NG projects to execute queries",
     "type": "composer-plugin",
     "require": {
