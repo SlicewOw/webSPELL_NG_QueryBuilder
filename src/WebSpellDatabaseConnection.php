@@ -24,10 +24,14 @@ class WebSpellDatabaseConnection {
             throw new \UnexpectedValueException("cannot_read_database_configuration");
         }
 
-        require_once($path_to_database_configuration_file);
+        include($path_to_database_configuration_file);
 
         if (defined('PREFIX')) {
             self::$PREFIX = PREFIX;
+        }
+
+        if (!isset($user)) {
+            throw new \InvalidArgumentException("cannot_read_database_user");
         }
 
         return array(
