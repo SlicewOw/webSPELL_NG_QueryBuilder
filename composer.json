@@ -1,6 +1,7 @@
 {
     "name": "webspell_ng/query_builder",
     "description": "QueryBuilder can be used within webSPELL NG projects to execute queries",
+    "type": "library",
     "require": {
         "php": "^7.2",
         "doctrine/dbal": "^2.10"
