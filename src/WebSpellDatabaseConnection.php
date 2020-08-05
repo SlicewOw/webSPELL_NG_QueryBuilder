@@ -44,4 +44,12 @@ class WebSpellDatabaseConnection {
 
     }
 
+    public static function getTablePrefix(): string
+    {
+        if (is_null(self::$PREFIX)) {
+            throw new \UnexpectedValueException("database_table_prefix_is_invalid");
+        }
+        return self::$PREFIX;
+    }
+
 }
