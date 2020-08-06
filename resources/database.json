@@ -1,0 +1,7 @@
+{
+    "host": "localhost",
+    "db_name": "webspell_ng",
+    "db_username": "root",
+    "db_password": "",
+    "prefix": "ws_p40_"
+}

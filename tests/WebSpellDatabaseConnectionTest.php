@@ -2,17 +2,20 @@
 
 use PHPUnit\Framework\TestCase;
 
+use Doctrine\DBAL\Connection;
+
 use \webspell_ng\WebSpellDatabaseConnection;
 
 final class WebSpellDatabaseConnectionTest extends TestCase
 {
 
-    public function testIfUnexpectedValueExceptionIsThrownIfDatabaseConfigFileIsMissing(): void
+    public function testIfDefaultDatabaseIsConnectingToDevDatabase(): void
     {
 
-        $this->expectException(UnexpectedValueException::class);
+        $database_connection = WebSpellDatabaseConnection::getDatabaseConnection();
 
-        WebSpellDatabaseConnection::getDatabaseConnection();
+        $this->assertInstanceOf(Connection::class, $database_connection);
+        $this->assertTrue(!empty(WebSpellDatabaseConnection::getTablePrefix()));
 
     }
 
