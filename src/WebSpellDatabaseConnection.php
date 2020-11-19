@@ -28,23 +28,28 @@ class WebSpellDatabaseConnection {
             self::getDatabaseConfigurationFile()
         );
         $dotenv->load();
-        $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_PREFIX']);
 
-        if (!isset($_SERVER["DB_USER"])) {
+        $dotenv->required('DB_HOST')->notEmpty();
+        $dotenv->required('DB_NAME')->notEmpty();
+        $dotenv->required('DB_USER')->notEmpty();
+        $dotenv->required('DB_PASS');
+        $dotenv->required('DB_PREFIX')->notEmpty();
+
+        if (!isset($_ENV["DB_USER"])) {
             throw new \InvalidArgumentException("cannot_read_database_user");
         }
 
-        self::$PREFIX = $_SERVER["DB_PREFIX"];
+        self::$PREFIX = $_ENV["DB_PREFIX"];
 
         if (!defined("PREFIX")) {
             define("PREFIX", self::$PREFIX);
         }
 
         return array(
-            'dbname' => $_SERVER["DB_NAME"],
-            'user' => $_SERVER["DB_USER"],
-            'password' => $_SERVER["DB_PASS"],
-            'host' => $_SERVER["DB_HOST"],
+            'dbname' => $_ENV["DB_NAME"],
+            'user' => $_ENV["DB_USER"],
+            'password' => $_ENV["DB_PASS"],
+            'host' => $_ENV["DB_HOST"],
             'driver' => 'pdo_mysql'
         );
 
