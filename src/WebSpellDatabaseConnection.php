@@ -3,7 +3,7 @@
 namespace webspell_ng;
 
 use Doctrine\DBAL\Connection;
-use Noodlehaus\Config;
+use Dotenv\Dotenv;
 
 class WebSpellDatabaseConnection {
 
@@ -18,31 +18,33 @@ class WebSpellDatabaseConnection {
     }
 
     /**
-     * @return array<string>
+     * @return array{dbname: string, user: string, password: string, host: string, driver: string}
      */
     private static function readDatabaseConfiguration(): array
     {
 
-        $configuration = Config::load(
+        $dotenv = Dotenv::createImmutable(
             self::getDatabaseConfigurationFile()
         );
+        $dotenv->load();
+        $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_PREFIX']);
 
-        if (!isset($configuration["db_username"])) {
+        if (!isset($_SERVER["DB_USER"])) {
             throw new \InvalidArgumentException("cannot_read_database_user");
         }
 
-        self::$PREFIX = $configuration["prefix"];
+        self::$PREFIX = $_SERVER["DB_PREFIX"];
 
         if (!defined("PREFIX")) {
             define("PREFIX", self::$PREFIX);
         }
 
         return array(
-            'dbname' => (isset($configuration["db_name"])) ? $configuration["db_name"] : null,
-            'user' => (isset($configuration["db_username"])) ? $configuration["db_username"] : null,
-            'password' => (isset($configuration["db_password"])) ? $configuration["db_password"] : null,
-            'host' => (isset($configuration["host"])) ? $configuration["host"] : null,
-            'driver' => 'pdo_mysql',
+            'dbname' => $_SERVER["DB_NAME"],
+            'user' => $_SERVER["DB_USER"],
+            'password' => $_SERVER["DB_PASS"],
+            'host' => $_SERVER["DB_HOST"],
+            'driver' => 'pdo_mysql'
         );
 
     }
@@ -50,10 +52,10 @@ class WebSpellDatabaseConnection {
     private static function getDatabaseConfigurationFile(): string
     {
 
-        $path_to_database_configuration_file = __DIR__ . '/../../../../database.json';
+        $path_to_database_configuration_file = __DIR__ . '/../../../../';
 
-        if (!file_exists($path_to_database_configuration_file)) {
-            $path_to_database_configuration_file = __DIR__ . '/../resources/database.json';
+        if (!file_exists($path_to_database_configuration_file . '.env')) {
+            $path_to_database_configuration_file = __DIR__ . '/../resources/';
         }
 
         return $path_to_database_configuration_file;
