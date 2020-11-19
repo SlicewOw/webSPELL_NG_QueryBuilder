@@ -48,9 +48,6 @@ jobs:
     - name: Start MySQL service
       run: sudo systemctl start mysql
 
-    - name: Create MySQL tables
-      run: mysql --host=127.0.0.1 --port=33306 --user=root --protocol=tcp webspell_ng < sql/install.sql
-
     - name: Run test suite
       env:
         DB_CONNECTION: mysql
