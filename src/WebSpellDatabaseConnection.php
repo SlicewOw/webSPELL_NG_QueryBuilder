@@ -2,8 +2,9 @@
 
 namespace webspell_ng;
 
-use Doctrine\DBAL\Connection;
-use Dotenv\Dotenv;
+use \Doctrine\DBAL\Connection;
+use \Doctrine\DBAL\DriverManager;
+use \Dotenv\Dotenv;
 
 class WebSpellDatabaseConnection {
 
@@ -12,7 +13,7 @@ class WebSpellDatabaseConnection {
 
     public static function getDatabaseConnection(): Connection
     {
-        return \Doctrine\DBAL\DriverManager::getConnection(
+        return DriverManager::getConnection(
             WebSpellDatabaseConnection::readDatabaseConfiguration()
         );
     }
@@ -52,13 +53,13 @@ class WebSpellDatabaseConnection {
     private static function getDatabaseConfigurationFile(): string
     {
 
-        $path_to_database_configuration_file = __DIR__ . '/../../../../';
+        $path_to_database_configuration_file = __DIR__ . '/../../../../.env';
 
-        if (!file_exists($path_to_database_configuration_file . '.env')) {
-            $path_to_database_configuration_file = __DIR__ . '/../resources/';
+        if (!file_exists($path_to_database_configuration_file)) {
+            $path_to_database_configuration_file = __DIR__ . '/../resources/.env';
         }
 
-        return $path_to_database_configuration_file;
+        return \dirname($path_to_database_configuration_file);
 
     }
 
