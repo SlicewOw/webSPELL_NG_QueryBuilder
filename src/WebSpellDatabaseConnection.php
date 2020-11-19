@@ -24,16 +24,7 @@ class WebSpellDatabaseConnection {
     private static function readDatabaseConfiguration(): array
     {
 
-        $dotenv = Dotenv::createImmutable(
-            self::getDatabaseConfigurationFile()
-        );
-        $dotenv->load();
-
-        $dotenv->required('DB_HOST')->notEmpty();
-        $dotenv->required('DB_NAME')->notEmpty();
-        $dotenv->required('DB_USER')->notEmpty();
-        $dotenv->required('DB_PASS');
-        $dotenv->required('DB_PREFIX')->notEmpty();
+        self::loadEnvironmentVariables();
 
         if (!isset($_ENV["DB_USER"])) {
             throw new \InvalidArgumentException("cannot_read_database_user");
@@ -52,6 +43,26 @@ class WebSpellDatabaseConnection {
             'host' => $_ENV["DB_HOST"],
             'driver' => 'pdo_mysql'
         );
+
+    }
+
+    private static function loadEnvironmentVariables(): void
+    {
+
+        if (isset($_ENV["DB_USER"])) {
+            return;
+        }
+
+        $dotenv = Dotenv::createImmutable(
+            self::getDatabaseConfigurationFile()
+        );
+        $dotenv->load();
+
+        $dotenv->required('DB_HOST')->notEmpty();
+        $dotenv->required('DB_NAME')->notEmpty();
+        $dotenv->required('DB_USER')->notEmpty();
+        $dotenv->required('DB_PASS');
+        $dotenv->required('DB_PREFIX')->notEmpty();
 
     }
 
