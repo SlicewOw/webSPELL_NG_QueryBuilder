@@ -15,7 +15,16 @@ final class WebSpellDatabaseConnectionTest extends TestCase
         $database_connection = WebSpellDatabaseConnection::getDatabaseConnection();
 
         $this->assertInstanceOf(Connection::class, $database_connection);
-        $this->assertTrue(!empty(WebSpellDatabaseConnection::getTablePrefix()));
+        $this->assertTrue(!empty(WebSpellDatabaseConnection::getTablePrefix()), "Table prefix is set.");
+
+        /**
+         * Test of the lazy initialization
+         */
+
+        $database_connection = WebSpellDatabaseConnection::getDatabaseConnection();
+
+        $this->assertInstanceOf(Connection::class, $database_connection);
+        $this->assertTrue(!empty(WebSpellDatabaseConnection::getTablePrefix()), "Table prefix is still set.");
 
     }
 

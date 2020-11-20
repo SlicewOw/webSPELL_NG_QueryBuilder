@@ -8,14 +8,24 @@ use \Dotenv\Dotenv;
 
 class WebSpellDatabaseConnection {
 
-    /** @var string $PREFIX */
+    /**
+     * @var string $PREFIX
+     */
     public static $PREFIX;
+
+    /**
+     * @var Connection $connection
+     */
+    private static $connection = null;
 
     public static function getDatabaseConnection(): Connection
     {
-        return DriverManager::getConnection(
-            WebSpellDatabaseConnection::readDatabaseConfiguration()
-        );
+        if (is_null(self::$connection)) {
+            self::$connection = DriverManager::getConnection(
+                WebSpellDatabaseConnection::readDatabaseConfiguration()
+            );
+        }
+        return self::$connection;
     }
 
     /**
@@ -25,10 +35,6 @@ class WebSpellDatabaseConnection {
     {
 
         self::loadEnvironmentVariables();
-
-        if (!isset($_ENV["DB_USER"])) {
-            throw new \InvalidArgumentException("cannot_read_database_user");
-        }
 
         self::$PREFIX = $_ENV["DB_PREFIX"];
 
@@ -49,7 +55,7 @@ class WebSpellDatabaseConnection {
     private static function loadEnvironmentVariables(): void
     {
 
-        if (isset($_ENV["DB_USER"])) {
+        if (self::testIfAllRequiredEnvironmentVariablesArePresent()) {
             return;
         }
 
@@ -63,6 +69,28 @@ class WebSpellDatabaseConnection {
         $dotenv->required('DB_USER')->notEmpty();
         $dotenv->required('DB_PASS');
         $dotenv->required('DB_PREFIX')->notEmpty();
+
+
+    }
+
+    private static function testIfAllRequiredEnvironmentVariablesArePresent(): bool
+    {
+
+        $environment_variables = array(
+            "DB_HOST",
+            "DB_NAME",
+            "DB_USER",
+            "DB_PASS",
+            "DB_PREFIX"
+        );
+
+        foreach ($environment_variables as $environment_variable) {
+            if (!isset($_ENV[$environment_variable])) {
+                return false;
+            }
+        }
+
+        return true;
 
     }
 
