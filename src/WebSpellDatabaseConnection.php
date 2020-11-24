@@ -4,9 +4,17 @@ namespace webspell_ng;
 
 use \Doctrine\DBAL\Connection;
 use \Doctrine\DBAL\DriverManager;
+
 use \Dotenv\Dotenv;
 
 class WebSpellDatabaseConnection {
+
+    private const DB_HOST = "DB_HOST";
+    private const DB_PORT = "DB_PORT";
+    private const DB_NAME = "DB_NAME";
+    private const DB_USER = "DB_USER";
+    private const DB_PASS = "DB_PASS";
+    private const DB_PREFIX = "DB_PREFIX";
 
     /**
      * @var string $PREFIX
@@ -36,17 +44,17 @@ class WebSpellDatabaseConnection {
 
         self::loadEnvironmentVariables();
 
-        self::$PREFIX = $_ENV["DB_PREFIX"];
+        self::$PREFIX = $_ENV[self::DB_PREFIX];
 
         if (!defined("PREFIX")) {
             define("PREFIX", self::$PREFIX);
         }
 
         return array(
-            'dbname' => $_ENV["DB_NAME"],
-            'user' => $_ENV["DB_USER"],
-            'password' => $_ENV["DB_PASS"],
-            'host' => $_ENV["DB_HOST"],
+            'dbname' => $_ENV[self::DB_NAME],
+            'user' => $_ENV[self::DB_USER],
+            'password' => $_ENV[self::DB_PASS],
+            'host' => $_ENV[self::DB_HOST] . ':' . $_ENV[self::DB_PORT],
             'driver' => 'pdo_mysql'
         );
 
@@ -64,11 +72,12 @@ class WebSpellDatabaseConnection {
         );
         $dotenv->load();
 
-        $dotenv->required('DB_HOST')->notEmpty();
-        $dotenv->required('DB_NAME')->notEmpty();
-        $dotenv->required('DB_USER')->notEmpty();
-        $dotenv->required('DB_PASS');
-        $dotenv->required('DB_PREFIX')->notEmpty();
+        $dotenv->required(self::DB_HOST)->notEmpty();
+        $dotenv->required(self::DB_PORT)->notEmpty();
+        $dotenv->required(self::DB_NAME)->notEmpty();
+        $dotenv->required(self::DB_USER)->notEmpty();
+        $dotenv->required(self::DB_PASS);
+        $dotenv->required(self::DB_PREFIX)->notEmpty();
 
 
     }
@@ -77,11 +86,12 @@ class WebSpellDatabaseConnection {
     {
 
         $environment_variables = array(
-            "DB_HOST",
-            "DB_NAME",
-            "DB_USER",
-            "DB_PASS",
-            "DB_PREFIX"
+            self::DB_HOST,
+            self::DB_PORT,
+            self::DB_NAME,
+            self::DB_USER,
+            self::DB_PASS,
+            self::DB_PREFIX
         );
 
         foreach ($environment_variables as $environment_variable) {
