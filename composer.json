@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "php": "^7.2",
-        "doctrine/dbal": "^2.13",
+        "doctrine/dbal": "^3.0",
         "vlucas/phpdotenv": "^5.3"
     },
     "require-dev": {
