@@ -3,7 +3,7 @@
     "description": "QueryBuilder can be used within webSPELL NG projects to execute queries",
     "type": "library",
     "require": {
-        "php": "^7.2",
+        "php": ">=7.2",
         "doctrine/dbal": "^3.0",
         "vlucas/phpdotenv": "^5.3"
     },
